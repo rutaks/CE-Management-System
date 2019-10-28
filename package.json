@@ -1,0 +1,19 @@
+{
+  "name": "ce-management-system",
+  "version": "1.0.0",
+  "description": "CE Management System",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rutaks/CE-Management-System.git"
+  },
+  "author": "Samuel Rutakayile",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rutaks/CE-Management-System/issues"
+  },
+  "homepage": "https://github.com/rutaks/CE-Management-System#readme"
+}
