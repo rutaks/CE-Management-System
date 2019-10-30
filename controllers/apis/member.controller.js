@@ -1,6 +1,6 @@
-import Member from "../models/member.model";
-import Fellowship from "../models/fellowship.model";
-import Responses from "../helpers/responses";
+import Member from "../../models/member.model";
+import Fellowship from "../../models/fellowship.model";
+import Responses from "../../helpers/responses";
 
 class memberController {
   static createMember(req, res) {

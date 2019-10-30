@@ -1,5 +1,5 @@
 import Router from "express";
-import memberController from "../controllers/member.controller";
+import memberController from "../../controllers/apis/member.controller";
 
 const router = Router();
 

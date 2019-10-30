@@ -1,5 +1,5 @@
 import Router from "express";
-import fellowshipController from "../controllers/fellowship.controller";
+import fellowshipController from "../../controllers/apis/fellowship.controller";
 
 const router = new Router();
 

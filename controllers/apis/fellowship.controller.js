@@ -1,5 +1,5 @@
-import Fellowship from "../models/fellowship.model";
-import Responses from "../helpers/responses";
+import Fellowship from "../../models/fellowship.model";
+import Responses from "../../helpers/responses";
 
 class fellowshipController {
   static createFellowship(req, res) {
