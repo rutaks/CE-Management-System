@@ -3,37 +3,27 @@ import env from "custom-env";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import mongodb from "mongodb";
+import path from "path";
 
 import apiRoutes from "./routes/api.routes";
+import staticRoutes from "./routes/static.routes";
 
 const app = express();
 const port = process.env.PORT || 3000;
 const uri = process.env.MONGODB_URI;
 env.env();
 
+app.set("view engine", "ejs");
+app.set("views", "views");
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use("/", staticRoutes);
 app.use("/api", apiRoutes);
 
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Welcome to CE Management" });
-});
-
-app.use((req, res, next) => {
-  const error = new Error("There was an error");
-  error.status = 404;
-  next(error);
-});
-
-app.use((error, req, res, next) => {
-  res.status(error.status);
-  res.json({
-    error: {
-      message: error.message
-    }
-  });
-});
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
 
 mongoose
   .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
