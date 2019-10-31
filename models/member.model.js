@@ -11,6 +11,9 @@ const memberSchema = new Schema({
     type: String,
     required: true
   },
+  email: {
+    type: String
+  },
   dob: {
     type: Date
   },
@@ -21,7 +24,7 @@ const memberSchema = new Schema({
   phonenumber: {
     type: String
   },
-  fellowshipId: {
+  fellowship: {
     type: Schema.Types.ObjectId,
     ref: "Fellowship",
     required: true
