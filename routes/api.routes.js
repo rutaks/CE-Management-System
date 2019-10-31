@@ -1,5 +1,6 @@
 import memberRoutes from "./apis/member.route";
 import fellowshipRoutes from "./apis/fellowship.route";
+import partnershipRoutes from "./apis/partnership.route";
 import Router from "express";
 import Responses from "../helpers/responses";
 
@@ -12,5 +13,6 @@ router.get("/", (req, res) => {
 
 router.use("/fellowships", fellowshipRoutes);
 router.use("/members", memberRoutes);
+router.use("/partnerships", partnershipRoutes);
 
 export default router;
