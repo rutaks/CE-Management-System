@@ -1,0 +1,116 @@
+<%- include('../includes/header.ejs') %>
+<%- include('../includes/navbar.ejs') %>
+<!-- Main content -->
+<section class="content">
+    <div class="c">
+        <!-- left column -->
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Partnership Pledge Record</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                            class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                            class="fa fa-remove"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+
+            <div class="box-body">
+                <form role="form" action="/admin/pledges/partnerships" method="POST">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Members</label>
+                            <select class="form-control select2" name="member" style="width: 100%;">
+                                <option selected="selected">None</option>
+                                <% for(let member of members){  %>
+                                <option value="<%= member._id %>"><%= member.firstname%> <%= member.lastname%>
+                                    (<%= member.fellowship.name%>)</option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Partnership Arms</label>
+                            <select class="form-control select2" name="partnership" style="width: 100%;">
+                                <option selected="selected">None</option>
+                                <% for(let partnership of partnerships){  %>
+                                <option value="<%= partnership._id %>"><%= partnership.name%></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label for="amount">Amount</label>
+                        <input type="number" name="amount" class="form-control" id="amount"
+                            placeholder="Enter Pledge Amount">
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-block btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- /.box -->
+        </div>
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Giving Record</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                            class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                            class="fa fa-remove"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+
+            <div class="box-body">
+                <form role="form" action="/admin/pledges/partnerships" method="POST">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Members</label>
+                            <select class="form-control select2" name="member" style="width: 100%;">
+                                <option selected="selected">None</option>
+                                <% for(let member of members){  %>
+                                <option value="<%= member._id %>"><%= member.firstname%><%= member.lastname%></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Partnership Arms</label>
+                            <select class="form-control select2" name="partnership" style="width: 100%;">
+                                <option selected="selected">None</option>
+                                <% for(let partnership of partnerships){  %>
+                                <option value="<%= partnership._id %>"><%= partnership.name%></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label for="amount">Amount</label>
+                        <input type="number" name="amount" class="form-control" id="amount"
+                            placeholder="Enter Pledge Amount">
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-block btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- /.box -->
+        </div>
+    </div>
+</section>
+
+<script>
+
+</script>
+<!-- /.content -->
+
+<%- include('../includes/footer.ejs') %>

@@ -1,0 +1,63 @@
+<%- include('../includes/header.ejs') %>
+<%- include('../includes/navbar.ejs') %>
+<!-- Main content -->
+
+<section class="content">
+    <!-- /.row -->
+    <div class="c">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Partnership Pledge History</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Names</th>
+                                <th>Fellowship</th>
+                                <th>Partnership Arm</th>
+                                <th>Amount</th>
+                                <th>Pledged On</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(let pledge of pledges){  %>
+                            <tr>
+                                <td><%= pledge.member.firstname %> <%= pledge.member.lastname %></td>
+                                <td><%= pledge.member.fellowship.name || "None"%></td>
+                                <td><%= pledge.partnership.name%></td>
+                                <td><%= pledge.amount%></td>
+                                <td><%= pledge.createOn.toDateString()%></td>
+                                <td> <a href="" class="btn btn-block">
+                                        <li class="fa fa-list"></li>
+                                    </a> </td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Names</th>
+                                <th>Fellowship</th>
+                                <th>Partnership Arm</th>
+                                <th>Amount</th>
+                                <th>Pledged On</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+
+<script>
+
+</script>
+
+<%- include('../includes/footer.ejs') %>
