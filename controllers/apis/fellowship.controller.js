@@ -25,7 +25,9 @@ class fellowshipController {
   }
 
   static getFellowships(req, res) {
-    return Responses.send201(res, "Success", {});
+    Fellowship.find().then(fellowships => {
+      return Responses.send201(res, "Success", fellowships);
+    });
   }
 }
 
