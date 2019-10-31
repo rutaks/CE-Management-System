@@ -15,7 +15,7 @@ class memberController {
             res.render("admin/member-add", {
               fellowships: fellowships,
               members: members,
-              title: "Add Member"
+              title: "Member Page"
             });
           });
       });
