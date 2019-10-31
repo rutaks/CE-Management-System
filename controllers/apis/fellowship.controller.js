@@ -11,7 +11,7 @@ class fellowshipController {
         const fellowship = new Fellowship({ name: name });
         fellowship
           .save()
-          .then(res => {
+          .then(result => {
             return Responses.send201(res, "Fellowship Successfully Created", {
               fellowship: fellowship.name,
               createdOn: fellowship.createdOn
