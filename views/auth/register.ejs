@@ -1,0 +1,44 @@
+<%- include('../includes/header.ejs') %>
+<%- include('../includes/navbar.ejs') %>
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#"><b>CERW</b>MS</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Create User's Account</p>
+
+            <form action="/signup" method="post">
+                <div class="form-group has-feedback">
+                    <input type="text" name="username" class="form-control" placeholder="Username">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" name="confirmpassword" class="form-control" placeholder="Password">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Member</label>
+                    <select class="form-control select2" name="member" style="width: 100%;">
+                        <option selected="selected">None</option>
+                        <% for(let member of members){  %>
+                        <option value="<%= member._id %>"><%= member.firstname%> <%= member.lastname%>
+                        </option>
+                        <% } %>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+                <br>
+            </form>
+        </div>
+    </div>
+    <!-- /.login-box-body -->
+    </div>
+    <%- include('../includes/footer.ejs') %>
