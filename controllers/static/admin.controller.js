@@ -1,6 +1,6 @@
 class adminController {
   static getMainView(req, res) {
-    res.status(201).render("auth/login");
+    res.status(201).render("admin/index");
   }
 }
 

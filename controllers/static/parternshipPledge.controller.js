@@ -18,6 +18,10 @@ class PartnershipPledgeController {
   }
 
   static getPartnershipPledges(req, res) {
+    const d = new Date();
+    const month = d.getMonth();
+    const day = d.getDay();
+    const year = d.getFullYear();
     PartnershipPledge.find()
       .populate("member")
       .populate("partnership")
