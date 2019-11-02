@@ -1,20 +1,27 @@
 import PartnershipPledge from "../../models/partnership_pledge.model";
 import Partnership from "../../models/partnership.model";
 import Member from "../../models/member.model";
+import GivingCategory from "../../models/giving_category.model";
+import Giving from "../../models/giving.model";
+
+import moment from "moment";
 
 class PartnershipPledgeController {
   static getAddPartnershipPledgePage(req, res) {
-    Member.find()
-      .populate("fellowship")
-      .then(members => {
-        Partnership.find().then(partnerships => {
-          res.status(201).render("admin/pledges-add", {
-            partnerships: partnerships,
-            members: members,
-            title: "Pledges"
+    GivingCategory.find().then(givingCategories => {
+      Member.find()
+        .populate("fellowship")
+        .then(members => {
+          Partnership.find().then(partnerships => {
+            res.status(201).render("admin/pledges-add", {
+              partnerships: partnerships,
+              members: members,
+              givingCategories: givingCategories,
+              title: "Pledges"
+            });
           });
         });
-      });
+    });
   }
 
   static getPartnershipPledges(req, res) {
@@ -26,9 +33,27 @@ class PartnershipPledgeController {
       .populate("member")
       .populate("partnership")
       .then(pledges => {
-        res.status(201).render("admin/pledges", {
+        res.status(201).render("admin/all-partnerships", {
           pledges: pledges,
-          title: "Pledges"
+          title: "All Partnership Pledges Record"
+        });
+      });
+  }
+
+  static getGivings(req, res) {
+    let startdate = new Date(2019, 11, 2);
+    let enddate = new Date(2012, 11, 5);
+    Giving.find()
+      .populate("member")
+      .populate("giving")
+      .then(pledges => {
+        pledges.forEach(val => {
+          if (val.createOn === startdate) console.log(pledges);
+        });
+
+        res.status(201).render("admin/all-givings", {
+          pledges: pledges,
+          title: "All Giving Records"
         });
       });
   }
@@ -44,6 +69,21 @@ class PartnershipPledgeController {
     pledge
       .save()
       .then(result => res.redirect("/admin/pledges/partnerships"))
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  static saveGiving(req, res) {
+    let { giving, member, amount } = req.body;
+    const givings = new Giving({
+      giving: giving,
+      member: member,
+      amount: amount
+    });
+    givings
+      .save()
+      .then(result => res.redirect("/admin/pledges/"))
       .catch(err => {
         console.log(err);
       });
