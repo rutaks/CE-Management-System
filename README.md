@@ -1,2 +1,2 @@
 # CE-Management-System
-A Church Management System
+A Simple Budget Management System
