@@ -69,25 +69,26 @@
             <!-- form start -->
 
             <div class="box-body">
-                <form role="form" action="/admin/pledges/partnerships" method="POST">
+                <form role="form" action="/admin/pledges/givings" method="POST">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Members</label>
                             <select class="form-control select2" name="member" style="width: 100%;">
                                 <option selected="selected">None</option>
                                 <% for(let member of members){  %>
-                                <option value="<%= member._id %>"><%= member.firstname%><%= member.lastname%></option>
+                                <option value="<%= member._id %>"><%= member.firstname%> <%= member.lastname%>
+                                    (<%= member.fellowship.name%>)</option>
                                 <% } %>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Partnership Arms</label>
-                            <select class="form-control select2" name="partnership" style="width: 100%;">
+                            <label>Other Giving Categories</label>
+                            <select class="form-control select2" name="giving" style="width: 100%;">
                                 <option selected="selected">None</option>
-                                <% for(let partnership of partnerships){  %>
-                                <option value="<%= partnership._id %>"><%= partnership.name%></option>
+                                <% for(let givingCategory of givingCategories){  %>
+                                <option value="<%= givingCategory._id %>"><%= givingCategory.name%></option>
                                 <% } %>
                             </select>
                         </div>
