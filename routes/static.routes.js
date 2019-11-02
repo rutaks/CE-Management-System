@@ -8,7 +8,7 @@ import Router from "express";
 const router = Router();
 
 router.use("/", authRoutes);
-router.use("/admin", isAuth, adminRoutes);
-router.use("/admin/pledges/partnerships", isAuth, partnershipPledgeRoutes);
+router.use("/admin", adminRoutes);
+router.use("/admin/pledges/", partnershipPledgeRoutes);
 
 export default router;
