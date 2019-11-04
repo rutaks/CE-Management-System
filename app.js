@@ -6,6 +6,7 @@ import mongodb from "mongodb";
 import path from "path";
 import session from "express-session";
 import MongoDBSession from "connect-mongodb-session";
+import flashMessages from "connect-flash";
 
 import apiRoutes from "./routes/api.routes";
 import staticRoutes from "./routes/static.routes";
@@ -13,15 +14,18 @@ import staticRoutes from "./routes/static.routes";
 import Account from "./models/account.model";
 
 const app = express();
-const port = process.env.PORT || 4000;
-const uri = process.env.MONGODB_URI;
-const MongoDBStore = MongoDBSession(session);
-const store = new MongoDBStore({
-  uri: process.env.MONGODB_URI,
-  collection: "sessions"
-});
+const port = process.env.PORT || 3000;
+// const MongoDBStore = MongoDBSession(session);
+// const store = new MongoDBStore({
+//   uri: process.env.MONGODB_URI,
+//   collection: "sessions"
+// });
 
 env.env();
+
+// store.on("error", function(error) {
+//   console.log(error);
+// });
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -29,12 +33,13 @@ app.set("views", "views");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(flashMessages());
 app.use(
   session({
     secret: "Long ID should be here",
     resave: false,
-    saveUninitialized: false,
-    store: store
+    saveUninitialized: false
+    // store: store
   })
 );
 
