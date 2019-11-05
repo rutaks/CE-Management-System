@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/rutaks/CE-Management-System#readme",
   "dependencies": {
+    "@hapi/joi": "^16.1.7",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
