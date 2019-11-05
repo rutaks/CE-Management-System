@@ -1,4 +1,5 @@
 import Account from "../../models/account.model";
+import auth from "../../helpers/auth";
 import bcrypt from "bcryptjs";
 import memberController from "./member.controller";
 import Member from "../../models/member.model";
@@ -41,25 +42,19 @@ class authController {
 
   static login(req, res) {
     const { username, password } = req.body;
-    Account.findOne({ username: username })
-      .populate("member")
-      .then(account => {
-        if (!account) {
-          return res.redirect("/login");
-        }
-        bcrypt.compare(password, account.password).then(matches => {
-          if (matches) {
-            req.session.isLoggedIn = true;
-            req.session.account = account.username;
-            return res.redirect("/admin");
-          }
-          return res.redirect("/login");
-          //   req.flash("error", "Invalid email or password");
+    const account = auth.findAccount(username);
+    account.then(acc => {
+      if (auth.passwordIsValid(password, acc.password)) {
+        req.session.isLoggedIn = true;
+        req.session.account = acc.member.firstname + " " + acc.member.lastname;
+        return res.redirect("/admin");
+      } else {
+        return res.render("auth/login", {
+          errorMessage: "Invalid Username or Password",
+          oldInput: { email: username }
         });
-      })
-      .catch(err => {
-        console.log("ERR: Could Not Login, " + err);
-      });
+      }
+    });
   }
 
   static logout(req, res) {
