@@ -27,11 +27,8 @@ class PartnershipPledgeController {
   }
 
   static getPartnershipPledges(req, res) {
-    const start = formatter.getMomentCloudDate(moment().startOf("month"));
-    const end = formatter.getMomentCloudDate(moment().endOf("month"));
-    PartnershipPledge.find({
-      createOn: { $gte: start, $lte: end }
-    })
+    const { start, end } = formatter.getCurrentMonthRange();
+    PartnershipPledge.find({ createOn: { $gte: start, $lte: end } })
       .populate("member")
       .populate("partnership")
       .then(pledges => {
@@ -44,16 +41,12 @@ class PartnershipPledgeController {
   }
 
   static getGivings(req, res) {
-    let startdate = new Date(2019, 11, 2);
-    let enddate = new Date(2012, 11, 5);
-    Giving.find()
+    const { start, end } = formatter.getCurrentMonthRange();
+    Giving.find({ createOn: { $gte: start, $lte: end } })
       .populate("member")
       .populate("giving")
       .then(pledges => {
-        pledges.forEach(val => {
-          if (val.createOn === startdate) console.log(pledges);
-        });
-
+        console.log(calculator.findTotal(pledges));
         res.status(201).render("admin/all-givings", {
           pledges: pledges,
           title: "All Giving Records"
