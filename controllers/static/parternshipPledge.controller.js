@@ -3,6 +3,8 @@ import Partnership from "../../models/partnership.model";
 import Member from "../../models/member.model";
 import GivingCategory from "../../models/giving_category.model";
 import Giving from "../../models/giving.model";
+import formatter from "../../helpers/formatters";
+import calculator from "../../helpers/calculator";
 
 import moment from "moment";
 
@@ -25,14 +27,15 @@ class PartnershipPledgeController {
   }
 
   static getPartnershipPledges(req, res) {
-    const d = new Date();
-    const month = d.getMonth();
-    const day = d.getDay();
-    const year = d.getFullYear();
-    PartnershipPledge.find()
+    const start = formatter.getMomentCloudDate(moment().startOf("month"));
+    const end = formatter.getMomentCloudDate(moment().endOf("month"));
+    PartnershipPledge.find({
+      createOn: { $gte: start, $lte: end }
+    })
       .populate("member")
       .populate("partnership")
       .then(pledges => {
+        console.log(calculator.findTotal(pledges));
         res.status(201).render("admin/all-partnerships", {
           pledges: pledges,
           title: "All Partnership Pledges Record"
