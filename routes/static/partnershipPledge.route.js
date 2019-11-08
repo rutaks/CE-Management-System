@@ -10,6 +10,10 @@ router.post(
   "/partnerships/dated",
   partnershipPledgeController.getDatedPartnershipPledges
 );
+router.get(
+  "/partnerships/member/:memberId",
+  partnershipPledgeController.getMemberPartnerships
+);
 
 router.post("/givings", partnershipPledgeController.saveGiving);
 router.get("/givings", partnershipPledgeController.getGivings);
