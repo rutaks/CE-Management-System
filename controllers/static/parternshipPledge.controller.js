@@ -34,7 +34,26 @@ class PartnershipPledgeController {
       const total = calculator.findTotal(pledges);
       res.status(201).render("admin/all-partnerships", {
         pledges: pledges,
-        title: "All Partnership Pledges Record",
+        title: "All Partnership Record",
+        startDate: new Date(start),
+        endDate: new Date(end),
+        totalAmount: total
+      });
+    });
+  }
+
+  static getMemberPartnerships(req, res) {
+    const { start, end } = formatter.getMonthRange();
+    const memberId = req.params.memberId;
+    searcher.partnershipByMember(memberId, start, end).then(pledges => {
+      const total = calculator.findTotal(pledges);
+      res.status(201).render("admin/member-partnerships", {
+        pledges: pledges,
+        title:
+          "Partnership Record Of " +
+          pledges[0].member.firstname +
+          " " +
+          pledges[0].member.lastname,
         startDate: new Date(start),
         endDate: new Date(end),
         totalAmount: total
