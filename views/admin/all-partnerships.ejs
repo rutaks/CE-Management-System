@@ -4,6 +4,17 @@
 
 <section class="content">
     <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="callout col-lg-4 callout-info">
+            <center>
+                <h1>Total Amount: <%= totalAmount %> Rwf</h1>
+                <h4>From: <%= startDate.toDateString() %> <br> To: <%= endDate.toDateString() %></h4>
+            </center>
+        </div>
+    </div>
+
     <div class="c">
         <div class="col-xs-12">
             <div class="box">
@@ -12,6 +23,30 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-10">
+                            <form action="/admin/pledges/partnerships/dated" method="post">
+                                <div class="form-group">
+                                    <label>Date range:</label>
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" name="datespan" class="form-control pull-right"
+                                            id="reservation">
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+
+                                <button type="submit" class="btn btn-block btn-primary">Submit</button>
+
+                            </form>
+                        </div>
+                    </div>
+                    <br>
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>

@@ -4,9 +4,17 @@ class formatter {
   static getMomentCloudDate(date) {
     return date.utcOffset("+0700").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
   }
-  static getCurrentMonthRange() {
-    const start = formatter.getMomentCloudDate(moment().startOf("month"));
-    const end = formatter.getMomentCloudDate(moment().endOf("month"));
+  static getMonthRange(...req) {
+    let start = "";
+    let end = "";
+    if (req == 0) {
+      start = formatter.getMomentCloudDate(moment().startOf("month"));
+      end = formatter.getMomentCloudDate(moment().endOf("month"));
+    } else {
+      start = formatter.getMomentCloudDate(moment(req[0]));
+      end = formatter.getMomentCloudDate(moment(req[1]));
+    }
+
     return { start, end };
   }
 }

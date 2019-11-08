@@ -5,6 +5,7 @@ import GivingCategory from "../../models/giving_category.model";
 import Giving from "../../models/giving.model";
 import formatter from "../../helpers/formatters";
 import calculator from "../../helpers/calculator";
+import searcher from "../../helpers/searchers";
 
 import moment from "moment";
 
@@ -26,22 +27,37 @@ class PartnershipPledgeController {
     });
   }
 
-  static getPartnershipPledges(req, res) {
-    const { start, end } = formatter.getCurrentMonthRange();
-    PartnershipPledge.find({ createOn: { $gte: start, $lte: end } })
-      .populate("member")
-      .populate("partnership")
-      .then(pledges => {
-        console.log(calculator.findTotal(pledges));
-        res.status(201).render("admin/all-partnerships", {
-          pledges: pledges,
-          title: "All Partnership Pledges Record"
-        });
+  static getDatedPartnershipPledges(req, res) {
+    const datespan = req.body.datespan.trim().split(" - ");
+    const { start, end } = formatter.getMonthRange(datespan[0], datespan[1]);
+    searcher.partnershipByDateSpan(start, end).then(pledges => {
+      const total = calculator.findTotal(pledges);
+      res.status(201).render("admin/all-partnerships", {
+        pledges: pledges,
+        title: "All Partnership Pledges Record",
+        startDate: new Date(start),
+        endDate: new Date(end),
+        totalAmount: total
       });
+    });
+  }
+
+  static getPartnershipPledges(req, res) {
+    const { start, end } = formatter.getMonthRange();
+    searcher.partnershipByDateSpan(start, end).then(pledges => {
+      const total = calculator.findTotal(pledges);
+      res.status(201).render("admin/all-partnerships", {
+        pledges: pledges,
+        title: "All Partnership Pledges Record",
+        startDate: new Date(start),
+        endDate: new Date(end),
+        totalAmount: total
+      });
+    });
   }
 
   static getGivings(req, res) {
-    const { start, end } = formatter.getCurrentMonthRange();
+    const { start, end } = formatter.getMonthRange();
     Giving.find({ createOn: { $gte: start, $lte: end } })
       .populate("member")
       .populate("giving")
