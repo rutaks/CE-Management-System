@@ -32,7 +32,7 @@ app.set("views", "views");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(flashMessages());
 app.use(
   session({
@@ -77,3 +77,5 @@ mongoose
   .catch(err => {
     console.error("ERR: Could not connect to MongoDB, " + err);
   });
+
+export default app;

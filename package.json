@@ -5,14 +5,15 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node app.js"
+    "clean": "rm -rf build && mkdir build",
+    "build-babel": "babel -d ./build ./src -s",
+    "build": "npm run clean && npm run build-babel",
+    "start": "npm run build && node ./build/app.js"
   },
   "author": "Samuel Rutakayile",
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^16.1.7",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-es2015-node": "^6.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",

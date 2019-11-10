@@ -1,5 +1,5 @@
 import PartnershipPledge from "../models/partnership_pledge.model";
-import formatter from "../helpers/formatters";
+import formatter from "./formatters";
 
 class searcher {
   static partnershipByDateSpan(start, end) {
