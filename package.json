@@ -5,19 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "build": "babel --presets es2015 -d lib/ src"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rutaks/CE-Management-System.git"
+    "start": "nodemon --exec babel-node app.js",
+    "build": "babel --presets es2015 -d lib/ ."
   },
   "author": "Samuel Rutakayile",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/rutaks/CE-Management-System/issues"
-  },
-  "homepage": "https://github.com/rutaks/CE-Management-System#readme",
   "dependencies": {
     "@hapi/joi": "^16.1.7",
     "bcryptjs": "^2.4.3",
