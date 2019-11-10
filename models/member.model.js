@@ -29,6 +29,11 @@ const memberSchema = new Schema({
     ref: "Fellowship",
     required: true
   },
+  department: {
+    type: Schema.Types.ObjectId,
+    ref: "Department",
+    required: true
+  },
   createOn: {
     type: Date,
     default: Date.now

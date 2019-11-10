@@ -1,5 +1,6 @@
 import memberRoutes from "./apis/member.route";
 import fellowshipRoutes from "./apis/fellowship.route";
+import departmentRoutes from "./apis/department.route";
 import partnershipRoutes from "./apis/partnership.route";
 import givingCategoryRoutes from "./apis/giving_category.routes";
 import Router from "express";
@@ -13,6 +14,7 @@ router.get("/", (req, res) => {
 });
 
 router.use("/fellowships", fellowshipRoutes);
+router.use("/departments", departmentRoutes);
 router.use("/members", memberRoutes);
 router.use("/partnerships", partnershipRoutes);
 router.use("/givings", givingCategoryRoutes);

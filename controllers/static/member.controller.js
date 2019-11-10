@@ -1,22 +1,30 @@
 import Fellowship from "../../models/fellowship.model";
+import Department from "../../models/department.model";
 import Member from "../../models/member.model";
 
 class memberController {
   //Displats Add Page
   static getAddMemberPage(req, res) {
-    Fellowship.find()
-      .then(fellowship => {
-        return fellowship;
+    Department.find()
+      .then(departments => {
+        return departments;
       })
-      .then(fellowships => {
-        Member.find()
-          .populate("fellowship")
-          .then(members => {
-            res.render("admin/member-add", {
-              fellowships: fellowships,
-              members: members,
-              title: "Member Page"
-            });
+      .then(departments => {
+        Fellowship.find()
+          .then(fellowship => {
+            return fellowship;
+          })
+          .then(fellowships => {
+            Member.find()
+              .populate("fellowship")
+              .then(members => {
+                res.render("admin/member-add", {
+                  departments: departments,
+                  fellowships: fellowships,
+                  members: members,
+                  title: "Member Page"
+                });
+              });
           });
       });
   }
@@ -29,7 +37,8 @@ class memberController {
       phoneno,
       dob,
       gender,
-      fellowship
+      fellowship,
+      department
     } = req.body;
     phoneno = phoneno.replace(/-/g, "");
     Fellowship.findById(fellowship)
@@ -41,7 +50,8 @@ class memberController {
           phonenumber: phoneno,
           dob: dob,
           gender: gender,
-          fellowship: fellowship
+          fellowship: fellowship,
+          department: department
         });
         member.save();
         res.redirect("/admin/members");
