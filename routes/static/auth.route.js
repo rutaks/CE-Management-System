@@ -9,7 +9,7 @@ router.post("/login", authController.login);
 
 router.get("/logout", authController.logout);
 
-router.get("/signup", authController.getSignupPage);
-router.post("/signup", authController.signup);
+router.get("/signup", isAuth, authController.getSignupPage);
+router.post("/signup", isAuth, authController.signup);
 
 export default router;
