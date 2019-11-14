@@ -62,7 +62,7 @@
                         <div class="form-group">
                             <label>Fellowship</label>
                             <select class="form-control select2" name="fellowship" style="width: 100%;">
-                                <option selected="selected">None</option>
+                                <option selected="selected" value="">None</option>
                                 <% for(let fellowship of fellowships){  %>
                                 <option value="<%= fellowship._id %>"><%= fellowship.name%></option>
                                 <% } %>
@@ -130,7 +130,11 @@
                             <td><%= member.firstname %> <%= member.lastname %></td>
                             <td><%= member.email || "None"%></td>
                             <td><%= member.phonenumber || "None"%></td>
+                            <%if(typeof member.fellowship !== 'undefined'){%>
                             <td><%= member.fellowship.name || "None"%></td>
+                            <%} else {%>
+                            <td><%="None"%></td>
+                            <%}%>
                             <td><%= member.gender%></td>
                         </tr>
                         <% } %>
