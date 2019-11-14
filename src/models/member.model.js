@@ -26,13 +26,11 @@ const memberSchema = new Schema({
   },
   fellowship: {
     type: Schema.Types.ObjectId,
-    ref: "Fellowship",
-    required: true
+    ref: "Fellowship"
   },
   department: {
     type: Schema.Types.ObjectId,
-    ref: "Department",
-    required: true
+    ref: "Department"
   },
   createOn: {
     type: Date,
