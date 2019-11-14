@@ -30,6 +30,8 @@ class memberController {
   }
 
   static saveMember(req, res) {
+    let foundFellowship = null;
+    let foundDepartment = null;
     let {
       firstname,
       lastname,
@@ -41,24 +43,25 @@ class memberController {
       department
     } = req.body;
     phoneno = phoneno.replace(/-/g, "");
-    Fellowship.findById(fellowship)
-      .then(fellowship => {
-        const member = new Member({
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          phonenumber: phoneno,
-          dob: dob,
-          gender: gender,
-          fellowship: fellowship,
-          department: department
-        });
-        member.save();
-        res.redirect("/admin/members");
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (fellowship.match(/^[0-9a-fA-F]{24}$/)) {
+      foundFellowship = Fellowship.findById(fellowship).exec();
+    }
+
+    if (department.match(/^[0-9a-fA-F]{24}$/)) {
+      foundDepartment = Department.findById(department).exec();
+    }
+    const member = new Member({
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      phonenumber: phoneno,
+      dob: dob,
+      gender: gender
+    });
+    if (foundFellowship) member.fellowship = fellowship;
+    if (foundDepartment) member.department = department;
+    member.save();
+    res.redirect("/admin/members");
   }
 }
 
