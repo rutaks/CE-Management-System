@@ -1,9 +1,10 @@
 import Joi from "@hapi/joi";
 
-const memberValidation = member => {
-  let Schema = Joi.object({
-    firstname: Joi.string.required(),
-    lastname: Joi.string.required(),
+const validateMember = member => {
+  member.phoneno = member.phoneno.replace(/-/g, "");
+  let memberSchema = Joi.object().keys({
+    firstname: Joi.string().required(),
+    lastname: Joi.string().required(),
     email: Joi.string().email({
       minDomainSegments: 2,
       tlds: { allow: ["com", "rw", "fr"] }
@@ -18,7 +19,7 @@ const memberValidation = member => {
       .regex(/^[0-9]{10}$/)
       .required()
   });
-  return Schema.validate(member);
+  return memberSchema.validate(member);
 };
 
-export { memberValidation };
+export { validateMember };
