@@ -18,21 +18,27 @@
             <!-- form start -->
 
             <div class="box-body">
+                <% if (typeof error != 'undefined') { %>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+                <% } %>
                 <form role="form" action="/admin/members" method="POST">
                     <div class="form-group col-lg-6">
                         <label for="firstname">First Name</label>
-                        <input type="firstname" name="firstname" class="form-control" id="firstname"
-                            placeholder="Enter First Name">
+                        <input type="text" value="<%= typeof errorValues != 'undefined' ? errorValues.firstname : '' %>"
+                            name="firstname" class="form-control" id="firstname" placeholder="Enter First Name">
                     </div>
                     <div class="form-group col-lg-6">
                         <label for="lastname">Last Name</label>
-                        <input type="lastname" name="lastname" class="form-control" id="lastname"
-                            placeholder="Enter Last Name">
+                        <input type="text" value="<%= typeof errorValues != 'undefined' ? errorValues.lastname : '' %>"
+                            name="lastname" class="form-control" id="lastname" placeholder="Enter Last Name">
                     </div>
 
                     <div class="form-group col-lg-6">
                         <label for="email">Email</label>
-                        <input type="email" name="email" class="form-control" id="email" placeholder="Enter Email">
+                        <input type="email" value="<%= typeof errorValues != 'undefined' ? errorValues.email : '' %>"
+                            name="email" class="form-control" id="email" placeholder="Enter Email">
                     </div>
 
                     <div class="form-group col-lg-6">
@@ -42,7 +48,9 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-phone"></i> . +25
                             </div>
-                            <input type="text" name="phoneno" class="form-control"
+                            <input type="text"
+                                value="<%= typeof errorValues != 'undefined' ? errorValues.phoneno : '' %>"
+                                name="phoneno" class="form-control"
                                 data-inputmask="'mask': ['9999-999-999', '+099 99 99 9999[9]-9999']" data-mask>
                         </div>
                         <!-- /.input group -->
@@ -54,7 +62,8 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </div>
-                            <input type="text" name="dob" class="form-control pull-right" id="datepicker">
+                            <input type="text" value="<%= typeof errorValues != 'undefined' ? errorValues.dob : '' %>"
+                                name="dob" class="form-control pull-right" id="datepicker">
                         </div>
                         <!-- /.input group -->
                     </div>
@@ -98,7 +107,7 @@
                     <!-- /.box-body -->
 
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-block btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
