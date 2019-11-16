@@ -11,8 +11,8 @@ class formatter {
       start = formatter.getMomentCloudDate(moment().startOf("month"));
       end = formatter.getMomentCloudDate(moment().endOf("month"));
     } else {
-      start = formatter.getMomentCloudDate(moment(req[0]));
-      end = formatter.getMomentCloudDate(moment(req[1]));
+      start = formatter.getMomentCloudDate(moment(req[0], "MM/DD/YYYY"));
+      end = formatter.getMomentCloudDate(moment(req[1], "MM/DD/YYYY"));
     }
 
     return { start, end };
