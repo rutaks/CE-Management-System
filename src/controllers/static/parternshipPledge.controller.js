@@ -27,17 +27,20 @@ class PartnershipPledgeController {
     });
   }
 
-  static getDatedPartnershipPledges(req, res) {
+  static async getDatedPartnershipPledges(req, res) {
+    const partnershipArm = req.body.partnershipArm;
     const datespan = req.body.datespan.trim().split(" - ");
+    const partnershipArms = await Partnership.find().exec();
     const { start, end } = formatter.getMonthRange(datespan[0], datespan[1]);
-    searcher.partnershipByDateSpan(start, end).then(pledges => {
+    searcher.partnershipByDateSpan(start, end, partnershipArm).then(pledges => {
       const total = calculator.findTotal(pledges);
       res.status(201).render("admin/all-partnerships", {
         pledges: pledges,
         title: "All Partnership Record",
         startDate: new Date(start),
         endDate: new Date(end),
-        totalAmount: total
+        totalAmount: total,
+        partnershipArms: partnershipArms
       });
     });
   }
@@ -61,16 +64,19 @@ class PartnershipPledgeController {
     });
   }
 
-  static getPartnershipPledges(req, res) {
+  static async getPartnershipPledges(req, res) {
     const { start, end } = formatter.getMonthRange();
-    searcher.partnershipByDateSpan(start, end).then(pledges => {
+    const partnershipArms = await Partnership.find().exec();
+
+    searcher.partnershipByDateSpan(start, end, "").then(pledges => {
       const total = calculator.findTotal(pledges);
       res.status(201).render("admin/all-partnerships", {
         pledges: pledges,
         title: "All Partnership Pledges Record",
         startDate: new Date(start),
         endDate: new Date(end),
-        totalAmount: total
+        totalAmount: total,
+        partnershipArms: partnershipArms
       });
     });
   }
@@ -89,13 +95,14 @@ class PartnershipPledgeController {
       });
   }
 
-  static savePartnershipPledge(req, res) {
+  static async savePartnershipPledge(req, res) {
     let { partnership, member, amount } = req.body;
     const { value, error } = validatePartnership(req.body);
 
     if (error) {
       const { start, end } = formatter.getMonthRange();
-      searcher.partnershipByDateSpan(start, end).then(pledges => {
+      const partnershipArms = await Partnership.find().exec();
+      searcher.partnershipByDateSpan(start, end, "").then(pledges => {
         const total = calculator.findTotal(pledges);
         res.status(201).render("admin/all-partnerships", {
           pledges: pledges,
@@ -103,6 +110,7 @@ class PartnershipPledgeController {
           startDate: new Date(start),
           endDate: new Date(end),
           totalAmount: total,
+          partnershipArms: partnershipArms,
           errorValues: value,
           error: error.details[0].message
         });
