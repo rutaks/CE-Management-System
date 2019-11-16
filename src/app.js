@@ -13,19 +13,19 @@ import staticRoutes from "./routes/static.routes";
 
 import Account from "./models/account.model";
 
-const app = express();
-const port = process.env.PORT || 3000;
-// const MongoDBStore = MongoDBSession(session);
-// const store = new MongoDBStore({
-//   uri: process.env.MONGODB_URI,
-//   collection: "sessions"
-// });
-
 env.env();
 
-// store.on("error", function(error) {
-//   console.log(error);
-// });
+const app = express();
+const port = process.env.PORT || 3000;
+const MongoDBStore = MongoDBSession(session);
+const store = new MongoDBStore({
+  uri: process.env.MONGODB_URI,
+  collection: "sessions"
+});
+
+store.on("error", function(error) {
+  console.log(error);
+});
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -36,24 +36,24 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(flashMessages());
 app.use(
   session({
-    secret: "Long ID should be here",
+    secret: "my secret",
     resave: false,
-    saveUninitialized: false
-    // store: store
+    saveUninitialized: false,
+    store: store
   })
 );
 
-app.use((req, res, next) => {
-  if (!req.session.account) return next();
-  Account.findById(req.session.account._id)
-    .then(account => {
-      req.acount = account;
-      next();
-    })
-    .catch(err => {
-      console.log("ERR: Could not find User, " + err);
-    });
-});
+// app.use((req, res, next) => {
+//   if (!req.session.account) return next();
+//   Account.findById(req.session.account._id)
+//     .then(account => {
+//       req.acount = account;
+//       next();
+//     })
+//     .catch(err => {
+//       console.log("ERR: Could not find User, " + err);
+//     });
+// });
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
