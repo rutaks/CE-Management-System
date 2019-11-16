@@ -45,7 +45,6 @@ const validateMember = member => {
     phoneno: Joi.string()
       .trim()
       .regex(/^[0-9]{10}$/)
-      .required()
   });
   return memberSchema.validate(member);
 };
