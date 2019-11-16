@@ -1,37 +1,30 @@
 import Fellowship from "../../models/fellowship.model";
 import Department from "../../models/department.model";
 import Member from "../../models/member.model";
+import {
+  validateMember,
+  fellowshipExists,
+  departmentExists
+} from "../../helpers/validations";
 
 class memberController {
   //Displats Add Page
-  static getAddMemberPage(req, res) {
-    Department.find()
-      .then(departments => {
-        return departments;
-      })
-      .then(departments => {
-        Fellowship.find()
-          .then(fellowship => {
-            return fellowship;
-          })
-          .then(fellowships => {
-            Member.find()
-              .populate("fellowship")
-              .then(members => {
-                res.render("admin/member-add", {
-                  departments: departments,
-                  fellowships: fellowships,
-                  members: members,
-                  title: "Member Page"
-                });
-              });
-          });
-      });
+  static async getAddMemberPage(req, res) {
+    let departments = await Department.find().exec();
+    let fellowships = await Fellowship.find().exec();
+    let members = await Member.find()
+      .populate("fellowship")
+      .exec();
+
+    res.render("admin/member-add", {
+      departments: departments,
+      fellowships: fellowships,
+      members: members,
+      title: "Member Page"
+    });
   }
 
-  static saveMember(req, res) {
-    let foundFellowship = null;
-    let foundDepartment = null;
+  static async saveMember(req, res) {
     let {
       firstname,
       lastname,
@@ -42,24 +35,38 @@ class memberController {
       fellowship,
       department
     } = req.body;
-    phoneno = phoneno.replace(/-/g, "");
-    if (fellowship.match(/^[0-9a-fA-F]{24}$/)) {
-      foundFellowship = Fellowship.findById(fellowship).exec();
-    }
+    let newPhoneNo = phoneno.replace(/-/g, "");
 
-    if (department.match(/^[0-9a-fA-F]{24}$/)) {
-      foundDepartment = Department.findById(department).exec();
+    const { value, error } = validateMember(req.body);
+
+    if (error) {
+      let departments = await Department.find().exec();
+      let fellowships = await Fellowship.find().exec();
+      let members = await Member.find()
+        .populate("fellowship")
+        .exec();
+
+      return res.render("admin/member-add", {
+        departments: departments,
+        fellowships: fellowships,
+        members: members,
+        errorValues: value,
+        error: error.details[0].message,
+        title: "Member Page"
+      });
     }
     const member = new Member({
       firstname: firstname,
       lastname: lastname,
       email: email,
-      phonenumber: phoneno,
+      phonenumber: newPhoneNo,
       dob: dob,
       gender: gender
     });
-    if (foundFellowship) member.fellowship = fellowship;
-    if (foundDepartment) member.department = department;
+
+    if (fellowshipExists(fellowship)) member.fellowship = fellowship;
+    if (departmentExists(department)) member.department = department;
+
     member.save();
     res.redirect("/admin/members");
   }
