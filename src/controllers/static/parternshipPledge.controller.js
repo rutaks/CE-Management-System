@@ -1,29 +1,29 @@
+//MODELS
 import PartnershipPledge from "../../models/partnership_pledge.model";
 import Partnership from "../../models/partnership.model";
 import Member from "../../models/member.model";
 import GivingCategory from "../../models/giving_category.model";
 import Giving from "../../models/giving.model";
+//HELPERS
 import formatter from "../../helpers/formatters";
 import calculator from "../../helpers/calculator";
 import searcher from "../../helpers/searchers";
-
+import { validatePartnership } from "../../helpers/validations";
+//OTHERS
 import moment from "moment";
 
 class PartnershipPledgeController {
-  static getAddPartnershipPledgePage(req, res) {
-    GivingCategory.find().then(givingCategories => {
-      Member.find()
-        .populate("fellowship")
-        .then(members => {
-          Partnership.find().then(partnerships => {
-            res.status(201).render("admin/pledges-add", {
-              partnerships: partnerships,
-              members: members,
-              givingCategories: givingCategories,
-              title: "Pledges"
-            });
-          });
-        });
+  static async getAddPartnershipPledgePage(req, res) {
+    const givingCategories = await GivingCategory.find().exec();
+    const partnerships = await Partnership.find().exec();
+    const members = await Member.find()
+      .populate("fellowship")
+      .exec();
+    res.status(201).render("admin/pledges-add", {
+      partnerships: partnerships,
+      members: members,
+      givingCategories: givingCategories,
+      title: "Pledges"
     });
   }
 
@@ -91,6 +91,23 @@ class PartnershipPledgeController {
 
   static savePartnershipPledge(req, res) {
     let { partnership, member, amount } = req.body;
+    const { value, error } = validatePartnership(req.body);
+
+    if (error) {
+      const { start, end } = formatter.getMonthRange();
+      searcher.partnershipByDateSpan(start, end).then(pledges => {
+        const total = calculator.findTotal(pledges);
+        res.status(201).render("admin/all-partnerships", {
+          pledges: pledges,
+          title: "All Partnership Pledges Record",
+          startDate: new Date(start),
+          endDate: new Date(end),
+          totalAmount: total,
+          errorValues: value,
+          error: error.details[0].message
+        });
+      });
+    }
     const pledge = new PartnershipPledge({
       partnership: partnership,
       member: member,
@@ -99,7 +116,7 @@ class PartnershipPledgeController {
     });
     pledge
       .save()
-      .then(result => res.redirect("/admin/pledges/partnerships"))
+      .then(result => res.redirect("/admin/pledges"))
       .catch(err => {
         console.log(err);
       });

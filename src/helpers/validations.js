@@ -16,10 +16,18 @@ const departmentExists = department => {
   return foundDepartment ? true : false;
 };
 
+const validatePartnership = partnershipSubmission => {
+  let partnershipSubmissionSchema = Joi.object({
+    partnership: Joi.string().required(),
+    member: Joi.string().required(),
+    amount: Joi.number().required()
+  });
+
+  return partnershipSubmissionSchema.validate(partnershipSubmission);
+};
+
 const validateMember = member => {
   member.phoneno = member.phoneno.replace(/-/g, "");
-  console.log();
-
   let memberSchema = Joi.object().keys({
     firstname: Joi.string().required(),
     lastname: Joi.string().required(),
@@ -42,4 +50,9 @@ const validateMember = member => {
   return memberSchema.validate(member);
 };
 
-export { validateMember, fellowshipExists, departmentExists };
+export {
+  validateMember,
+  fellowshipExists,
+  departmentExists,
+  validatePartnership
+};
