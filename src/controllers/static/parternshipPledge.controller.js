@@ -29,27 +29,32 @@ class PartnershipPledgeController {
 
   static async getDatedPartnershipPledges(req, res) {
     const partnershipArm = req.body.partnershipArm;
+    const currency = req.body.currency;
     const datespan = req.body.datespan.trim().split(" - ");
     const partnershipArms = await Partnership.find().exec();
     const { start, end } = formatter.getMonthRange(datespan[0], datespan[1]);
-    searcher.partnershipByDateSpan(start, end, partnershipArm).then(pledges => {
-      const total = calculator.findTotal(pledges);
-      res.status(201).render("admin/all-partnerships", {
-        pledges: pledges,
-        title: "All Partnership Record",
-        startDate: new Date(start),
-        endDate: new Date(end),
-        totalAmount: total,
-        partnershipArms: partnershipArms
+    searcher
+      .partnershipByDateSpan(start, end, partnershipArm, currency)
+      .then(pledges => {
+        const { usdTot, rwfTot } = calculator.findTotal(pledges, currency);
+        res.status(201).render("admin/all-partnerships", {
+          pledges: pledges,
+          title: "All Partnership Record",
+          startDate: new Date(start),
+          endDate: new Date(end),
+          totalAmountRwf: rwfTot,
+          totalAmountUsd: usdTot,
+          partnershipArms: partnershipArms
+        });
       });
-    });
   }
 
   static getMemberPartnerships(req, res) {
     const { start, end } = formatter.getMonthRange();
     const memberId = req.params.memberId;
+    const currency = req.params.currency;
     searcher.partnershipByMember(memberId, start, end).then(pledges => {
-      const total = calculator.findTotal(pledges);
+      const { usdTotal, rwfTotal } = calculator.findTotal(pledges, currency);
       res.status(201).render("admin/member-partnerships", {
         pledges: pledges,
         title:
@@ -59,7 +64,8 @@ class PartnershipPledgeController {
           pledges[0].member.lastname,
         startDate: new Date(start),
         endDate: new Date(end),
-        totalAmount: total
+        totalAmountRwf: rwfTotal,
+        totalAmountUsd: usdTotal
       });
     });
   }
@@ -68,14 +74,15 @@ class PartnershipPledgeController {
     const { start, end } = formatter.getMonthRange();
     const partnershipArms = await Partnership.find().exec();
 
-    searcher.partnershipByDateSpan(start, end, "").then(pledges => {
-      const total = calculator.findTotal(pledges);
+    searcher.partnershipByDateSpan(start, end, "", "").then(pledges => {
+      const { usdTotal, rwfTotal } = calculator.findTotal(pledges, currency);
       res.status(201).render("admin/all-partnerships", {
         pledges: pledges,
         title: "All Partnership Pledges Record",
         startDate: new Date(start),
         endDate: new Date(end),
-        totalAmount: total,
+        totalAmountRwf: rwfTotal,
+        totalAmountUsd: usdTotal,
         partnershipArms: partnershipArms
       });
     });
@@ -87,7 +94,7 @@ class PartnershipPledgeController {
       .populate("member")
       .populate("giving")
       .then(pledges => {
-        console.log(calculator.findTotal(pledges));
+        // console.log(calculator.findTotal(pledges));
         res.status(201).render("admin/all-givings", {
           pledges: pledges,
           title: "All Giving Records"
@@ -96,20 +103,21 @@ class PartnershipPledgeController {
   }
 
   static async savePartnershipPledge(req, res) {
-    let { partnership, member, amount } = req.body;
+    let { partnership, member, amount, currency } = req.body;
     const { value, error } = validatePartnership(req.body);
 
     if (error) {
       const { start, end } = formatter.getMonthRange();
       const partnershipArms = await Partnership.find().exec();
-      searcher.partnershipByDateSpan(start, end, "").then(pledges => {
-        const total = calculator.findTotal(pledges);
+      searcher.partnershipByDateSpan(start, end, "", "").then(pledges => {
+        const { usdTotal, rwfTotal } = calculator.findTotal(pledges, currency);
         res.status(201).render("admin/all-partnerships", {
           pledges: pledges,
           title: "All Partnership Pledges Record",
           startDate: new Date(start),
           endDate: new Date(end),
-          totalAmount: total,
+          totalAmountRwf: rwfTotal,
+          totalAmountUsd: usdTotal,
           partnershipArms: partnershipArms,
           errorValues: value,
           error: error.details[0].message
@@ -119,8 +127,8 @@ class PartnershipPledgeController {
     const pledge = new PartnershipPledge({
       partnership: partnership,
       member: member,
-      amount,
-      amount
+      amount: amount,
+      currency: currency
     });
     pledge
       .save()
