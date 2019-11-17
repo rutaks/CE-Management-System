@@ -20,7 +20,10 @@ const validatePartnership = partnershipSubmission => {
   let partnershipSubmissionSchema = Joi.object({
     partnership: Joi.string().required(),
     member: Joi.string().required(),
-    amount: Joi.number().required()
+    amount: Joi.number().required(),
+    currency: Joi.string()
+      .valid("RWF", "USD")
+      .required()
   });
 
   return partnershipSubmissionSchema.validate(partnershipSubmission);

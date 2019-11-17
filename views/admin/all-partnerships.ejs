@@ -9,7 +9,8 @@
         <div class="col-lg-4"></div>
         <div class="callout col-lg-4 callout-info">
             <center>
-                <h1>Total Amount: <%= totalAmount %> Rwf</h1>
+                <h2>Total Amount In USD: $<%= totalAmountUsd %></h2>
+                <h2>Total Amount In RWF: <%= totalAmountRwf %> Rwf</h2>
                 <h4>From: <%= startDate.toDateString() %> <br> To: <%= endDate.toDateString() %></h4>
             </center>
         </div>
@@ -28,9 +29,8 @@
                         <div class="col-lg-1"></div>
                         <div class="col-lg-11">
                             <form action="/admin/pledges/partnerships/dated" method="post">
-                                <div class="col-lg-5 form-group">
+                                <div class="col-lg-4 form-group">
                                     <label>Date range:</label>
-
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
@@ -40,13 +40,21 @@
                                     </div>
                                     <!-- /.input group -->
                                 </div>
-                                <div class="col-lg-5 form-group">
+                                <div class="col-lg-3 form-group">
                                     <label>Partnership Arm</label>
                                     <select class="form-control select2" name="partnershipArm" style="width: 100%;">
                                         <option selected="selected" value="">All</option>
                                         <% for(let partnershipsArm of partnershipArms){  %>
                                         <option value="<%= partnershipsArm._id %>"><%= partnershipsArm.name%></option>
                                         <% } %>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 form-group">
+                                    <label>Currency:</label>
+                                    <select class="form-control select2" name="currency" style="width: 100%;">
+                                        <option selected="selected" value="">All</option>
+                                        <option value="USD">USD</option>
+                                        <option value="RWF">RWF</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn col-lg-10 btn-primary">Submit</button>
@@ -72,7 +80,8 @@
                                 <td><%= pledge.member.firstname %> <%= pledge.member.lastname %></td>
                                 <td><%= pledge.member.fellowship.name || "None"%></td>
                                 <td><%= pledge.partnership.name%></td>
-                                <td><%= pledge.amount%></td>
+                                <td><%= pledge.amount%>
+                                    <%= typeof pledge.currency !== "undefined" ? pledge.currency : ""  %></td>
                                 <td><%= pledge.createOn.toDateString()%></td>
                                 <td> <a href="/admin/pledges/partnerships/member/<%= pledge.member._id %>"
                                         class="btn btn-block">
