@@ -33,11 +33,15 @@ const validateMember = member => {
     lastname: Joi.string().required(),
     fellowship: Joi.string().allow(""),
     department: Joi.string().allow(""),
-    email: Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "rw", "fr"] }
-    }),
-    dob: Joi.date().greater("1-1-1974"),
+    email: Joi.string()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ["com", "rw", "fr"] }
+      })
+      .allow(""),
+    dob: Joi.date()
+      .greater("1-1-1974")
+      .allow(""),
     gender: Joi.string()
       .valid("MALE", "FEMALE")
       .uppercase()
@@ -45,6 +49,7 @@ const validateMember = member => {
     phoneno: Joi.string()
       .trim()
       .regex(/^[0-9]{10}$/)
+      .allow("")
   });
   return memberSchema.validate(member);
 };

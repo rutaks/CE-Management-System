@@ -43,18 +43,26 @@ class authController {
   static login(req, res) {
     const { username, password } = req.body;
     const account = auth.findAccount(username);
-    account.then(acc => {
-      if (auth.passwordIsValid(password, acc.password)) {
-        req.session.isLoggedIn = true;
-        req.session.account = acc.member.firstname + " " + acc.member.lastname;
-        return res.redirect("/admin");
-      } else {
+    account
+      .then(acc => {
+        if (auth.passwordIsValid(password, acc.password)) {
+          req.session.isLoggedIn = true;
+          req.session.account =
+            acc.member.firstname + " " + acc.member.lastname;
+          return res.redirect("/admin");
+        } else {
+          return res.render("auth/login", {
+            errorMessage: "Invalid Username or Password",
+            oldInput: { email: username }
+          });
+        }
+      })
+      .catch(error => {
         return res.render("auth/login", {
-          errorMessage: "Invalid Username or Password",
+          errorMessage: "User Not Found",
           oldInput: { email: username }
         });
-      }
-    });
+      });
   }
 
   static logout(req, res) {

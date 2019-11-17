@@ -6,7 +6,7 @@ import isAuth from "../../middlewares/isAuth";
 const router = Router();
 
 router.get("/", isAuth, adminController.getMainView);
-router.get("/members", isAuth, memberController.getAddMemberPage);
-router.post("/members", isAuth, memberController.saveMember);
+router.get("/members", memberController.getAddMemberPage);
+router.post("/members", memberController.saveMember);
 
 export default router;
