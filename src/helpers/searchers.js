@@ -2,16 +2,16 @@ import PartnershipPledge from "../models/partnership_pledge.model";
 import formatter from "./formatters";
 
 class searcher {
-  static partnershipByDateSpan(start, end, partnershipArm) {
-    if (partnershipArm === "" || typeof partnershipArm === "undefined")
-      return PartnershipPledge.find({ createOn: { $gte: start, $lte: end } })
-        .populate("member")
-        .populate("partnership");
+  static partnershipByDateSpan(start, end, partnershipArm, currency) {
+    let query = { createOn: { $gte: start, $lte: end } };
+    if (partnershipArm !== "") {
+      query.partnership = partnershipArm;
+    }
+    if (currency !== "") {
+      query.currency = currency;
+    }
 
-    return PartnershipPledge.find({
-      partnership: partnershipArm,
-      createOn: { $gte: start, $lte: end }
-    })
+    return PartnershipPledge.find(query)
       .populate("member")
       .populate("partnership");
   }
