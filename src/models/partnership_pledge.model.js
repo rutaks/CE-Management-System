@@ -20,6 +20,10 @@ const partnershipPledgeSchema = new Schema({
   createOn: {
     type: Date,
     default: Date.now
+  },
+  currency: {
+    type: String,
+    enum: ["RWF", "USD"]
   }
 });
 
