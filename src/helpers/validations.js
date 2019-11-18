@@ -45,6 +45,9 @@ const validateMember = member => {
     dob: Joi.date()
       .greater("1-1-1974")
       .allow(""),
+    foundationGraduationDate: Joi.date()
+      .greater("1-1-1974")
+      .allow(""),
     firstTimeDate: Joi.date()
       .greater("1-1-1974")
       .allow("")
