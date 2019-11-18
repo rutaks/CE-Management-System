@@ -24,7 +24,7 @@ const memberSchema = new Schema({
   phonenumber: {
     type: String
   },
-  firstTimerDate: {
+  firstTimeDate: {
     type: Date
   },
   fellowship: {
@@ -32,7 +32,7 @@ const memberSchema = new Schema({
     ref: "Fellowship"
   },
   isConsistentForFirstTime:{
-    type: Boolean
+    type: Boolean,
     default: false
   },
   foundationGraduationDate: {

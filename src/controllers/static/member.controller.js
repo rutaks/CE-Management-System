@@ -66,7 +66,7 @@ class memberController {
       gender: gender
     });
 
-    if(firstTimeDate != "") member.firstTimeDate = firstTimeDate;
+    (firstTimeDate) ? member.firstTimeDate = firstTimeDate : member.firstTimeDate = new Date();
     if(foundationGraduationDate != "") member.foundationGraduationDate = foundationGraduationDate;
     if (fellowshipExists(fellowship)) member.fellowship = fellowship;
     if (departmentExists(department)) member.department = department;
