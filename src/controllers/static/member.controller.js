@@ -34,7 +34,8 @@ class memberController {
       gender,
       fellowship,
       department,
-      firstTimeDate
+      firstTimeDate,
+      foundationGraduationDate
     } = req.body;
     let newPhoneNo = phoneno.replace(/-/g, "");
 
@@ -65,6 +66,8 @@ class memberController {
       gender: gender
     });
 
+    if(firstTimeDate != "") member.firstTimeDate = firstTimeDate;
+    if(foundationGraduationDate != "") member.foundationGraduationDate = foundationGraduationDate;
     if (fellowshipExists(fellowship)) member.fellowship = fellowship;
     if (departmentExists(department)) member.department = department;
 
