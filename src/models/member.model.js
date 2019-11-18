@@ -24,9 +24,16 @@ const memberSchema = new Schema({
   phonenumber: {
     type: String
   },
+  firstTimerDate: {
+    type: Date
+  },
   fellowship: {
     type: Schema.Types.ObjectId,
     ref: "Fellowship"
+  },
+  isConsistentForFirstTime:{
+    type: Boolean
+    default: false
   },
   department: {
     type: Schema.Types.ObjectId,
