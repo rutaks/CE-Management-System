@@ -33,7 +33,8 @@ class memberController {
       dob,
       gender,
       fellowship,
-      department
+      department,
+      firstTimeDate
     } = req.body;
     let newPhoneNo = phoneno.replace(/-/g, "");
 
