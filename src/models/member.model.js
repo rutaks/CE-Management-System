@@ -35,6 +35,9 @@ const memberSchema = new Schema({
     type: Boolean
     default: false
   },
+  foundationGraduationDate: {
+      type: Date
+  },
   department: {
     type: Schema.Types.ObjectId,
     ref: "Department"
