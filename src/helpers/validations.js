@@ -50,7 +50,7 @@ const validateMember = member => {
       .allow(""),
     firstTimeDate: Joi.date()
       .greater("1-1-1974")
-      .allow("")
+      .allow(""),
     gender: Joi.string()
       .valid("MALE", "FEMALE")
       .uppercase()
