@@ -75,14 +75,14 @@ class PartnershipPledgeController {
     const partnershipArms = await Partnership.find().exec();
 
     searcher.partnershipByDateSpan(start, end, "", "").then(pledges => {
-      const { usdTotal, rwfTotal } = calculator.findTotal(pledges, currency);
+      const { usdTot, rwfTot } = calculator.findTotal(pledges, "");
       res.status(201).render("admin/all-partnerships", {
         pledges: pledges,
         title: "All Partnership Pledges Record",
         startDate: new Date(start),
         endDate: new Date(end),
-        totalAmountRwf: rwfTotal,
-        totalAmountUsd: usdTotal,
+        totalAmountRwf: rwfTot,
+        totalAmountUsd: usdTot,
         partnershipArms: partnershipArms
       });
     });
