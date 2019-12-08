@@ -23,6 +23,7 @@ class calculator {
         usdTot += element.amount;
       });
     }
+
     return { usdTot, rwfTot };
   }
 }
