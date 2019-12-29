@@ -9,7 +9,7 @@
         <div class="col-lg-4"></div>
         <div class="callout col-lg-4 callout-info">
             <center>
-                <h1>Total Amount: <%= totalAmount %> Rwf</h1>
+                <h1>Total Amount: <%= (typeof totalAmountRwf === "undefined") ? "0" : totalAmountRwf %> Rwf</h1>
                 <h4>From: <%= startDate.toDateString() %> <br> To: <%= endDate.toDateString() %></h4>
             </center>
         </div>

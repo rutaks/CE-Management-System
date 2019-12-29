@@ -54,7 +54,7 @@ class PartnershipPledgeController {
     const memberId = req.params.memberId;
     const currency = req.params.currency;
     searcher.partnershipByMember(memberId, start, end).then(pledges => {
-      const { usdTotal, rwfTotal } = calculator.findTotal(pledges, currency);
+      const { usdTot, rwfTot } = calculator.findTotal(pledges, currency);
       res.status(201).render("admin/member-partnerships", {
         pledges: pledges,
         title:
@@ -64,8 +64,8 @@ class PartnershipPledgeController {
           pledges[0].member.lastname,
         startDate: new Date(start),
         endDate: new Date(end),
-        totalAmountRwf: rwfTotal,
-        totalAmountUsd: usdTotal
+        totalAmountRwf: rwfTot,
+        totalAmountUsd: usdTot
       });
     });
   }
