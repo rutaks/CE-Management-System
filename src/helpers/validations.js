@@ -23,8 +23,10 @@ const validatePartnership = partnershipSubmission => {
     amount: Joi.number().required(),
     currency: Joi.string()
       .valid("RWF", "USD")
-      .required()
-  });
+      .required(),
+    currencyRate: Joi.number().allow(""),
+    createOn: Joi.date().allow("")
+  }).unknown(true);
 
   return partnershipSubmissionSchema.validate(partnershipSubmission);
 };
