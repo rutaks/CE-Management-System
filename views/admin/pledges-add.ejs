@@ -23,7 +23,7 @@
                     <%= error %>
                 </div>
                 <% } %>
-                <form role="form" action="/admin/pledges/partnerships" method="POST">
+                <form name="partnership" role="form" action="/admin/pledges/partnerships" method="POST">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Members</label>
@@ -48,21 +48,39 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group col-lg-12">
+                    <div class="form-group col-lg-6">
                         <label for="amount">Amount</label>
                         <input type="number" value="<%= typeof errorValues != 'undefined' ? errorValues.amount : '' %>"
                             name="amount" class="form-control" id="amount" placeholder="Enter Pledge Amount">
                     </div>
+                    <div class="form-group col-lg-6">
+                        <label>Date Of Recording:</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text"
+                                value="<%= typeof errorValues != 'undefined' ? errorValues.createOn : '' %>"
+                                name="createOn" class="form-control pull-right" id="datepicker">
+                        </div>
+                        <!-- /.input group -->
+                    </div>
                     <div class="form-group col-lg-12">
-
                         <label>
-                            <input type="radio" name="currency" value="RWF" class="minimal" checked>
+                            <input type="radio" name="currency" value="RWF" checked>
                             RWF
                         </label>
                         <label>
-                            <input type="radio" name="currency" value="USD" class="minimal">
+                            <input type="radio" name="currency" value="USD">
                             USD
                         </label>
+                    </div>
+                    <div id="currencyRateField" class="form-group col-lg-3">
+                        <label for="currencyRate">Currency Rate</label>
+                        <input type="number"
+                            value="<%= typeof errorValues != 'undefined' ? errorValues.currencyRate : '' %>"
+                            name="currencyRate" class="form-control" id="currencyRate"
+                            placeholder="Enter USD Currency Rate">
                     </div>
                     <div class="box-footer">
                         <button type="submit" class="btn btn-block btn-primary">Submit</button>
@@ -127,9 +145,6 @@
     </div>
 </section>
 
-<script>
-
-</script>
 <!-- /.content -->
 
 <%- include('../includes/footer.ejs') %>
