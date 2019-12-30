@@ -9,8 +9,6 @@ import formatter from "../../helpers/formatters";
 import calculator from "../../helpers/calculator";
 import searcher from "../../helpers/searchers";
 import { validatePartnership } from "../../helpers/validations";
-//OTHERS
-import moment from "moment";
 
 class PartnershipPledgeController {
   static async getAddPartnershipPledgePage(req, res) {
@@ -94,7 +92,6 @@ class PartnershipPledgeController {
       .populate("member")
       .populate("giving")
       .then(pledges => {
-        // console.log(calculator.findTotal(pledges));
         res.status(201).render("admin/all-givings", {
           pledges: pledges,
           title: "All Giving Records"
@@ -103,33 +100,26 @@ class PartnershipPledgeController {
   }
 
   static async savePartnershipPledge(req, res) {
-    let { partnership, member, amount, currency } = req.body;
     const { value, error } = validatePartnership(req.body);
 
     if (error) {
-      const { start, end } = formatter.getMonthRange();
       const partnershipArms = await Partnership.find().exec();
-      searcher.partnershipByDateSpan(start, end, "", "").then(pledges => {
-        const { usdTotal, rwfTotal } = calculator.findTotal(pledges, currency);
-        res.status(201).render("admin/all-partnerships", {
-          pledges: pledges,
-          title: "All Partnership Pledges Record",
-          startDate: new Date(start),
-          endDate: new Date(end),
-          totalAmountRwf: rwfTotal,
-          totalAmountUsd: usdTotal,
-          partnershipArms: partnershipArms,
-          errorValues: value,
-          error: error.details[0].message
-        });
+      const givingCategories = await GivingCategory.find().exec();
+      const members = await Member.find()
+        .populate("fellowship")
+        .exec();
+      return res.status(201).render("admin/pledges-add", {
+        partnerships: partnershipArms,
+        members: members,
+        givingCategories: givingCategories,
+        errorValues: value,
+        error: error.details[0].message
       });
     }
-    const pledge = new PartnershipPledge({
-      partnership: partnership,
-      member: member,
-      amount: amount,
-      currency: currency
-    });
+    console.log(value.createOn);
+    if (value.createOn.length < 1) delete value.createOn;
+    value.recordedBy = req.session.account;
+    const pledge = new PartnershipPledge(value);
     pledge
       .save()
       .then(result => res.redirect("/admin/pledges"))
