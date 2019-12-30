@@ -74,7 +74,8 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </div>
-                            <input type="text" value="<%= typeof errorValues != 'undefined' ? errorValues.firstTimeDate : '' %>"
+                            <input type="text"
+                                value="<%= typeof errorValues != 'undefined' ? errorValues.firstTimeDate : '' %>"
                                 name="firstTimeDate" class="form-control pull-right" id="datepicker">
                         </div>
                         <!-- /.input group -->
@@ -86,7 +87,8 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </div>
-                            <input type="text" value="<%= typeof errorValues != 'undefined' ? errorValues.firstTimeDate : '' %>"
+                            <input type="text"
+                                value="<%= typeof errorValues != 'undefined' ? errorValues.firstTimeDate : '' %>"
                                 name="foundationGraduationDate" class="form-control pull-right" id="datepicker">
                         </div>
                         <!-- /.input group -->
@@ -155,6 +157,7 @@
                             <th>Phone Number</th>
                             <th>Fellowship</th>
                             <th>Gender</th>
+                            <th>DOB</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -169,6 +172,11 @@
                             <td><%="None"%></td>
                             <%}%>
                             <td><%= member.gender%></td>
+                            <%if(typeof member.dob !== 'undefined'){%>
+                            <td><%= member.dob%></td>
+                            <%} else {%>
+                            <td><%="None"%></td>
+                            <%}%>
                         </tr>
                         <% } %>
                     </tbody>
