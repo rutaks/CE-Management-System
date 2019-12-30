@@ -43,18 +43,6 @@ app.use(
   })
 );
 
-// app.use((req, res, next) => {
-//   if (!req.session.account) return next();
-//   Account.findById(req.session.account._id)
-//     .then(account => {
-//       req.acount = account;
-//       next();
-//     })
-//     .catch(err => {
-//       console.log("ERR: Could not find User, " + err);
-//     });
-// });
-
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.account = req.session.account;
