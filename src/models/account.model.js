@@ -18,6 +18,19 @@ const accountSchema = new Schema({
   createOn: {
     type: Date,
     default: Date.now
+  },
+  permissions: [
+    {
+      type: String
+    }
+  ],
+  resetPasswordToken: {
+    type: String,
+    required: false
+  },
+  resetPasswordExpires: {
+    type: Date,
+    required: false
   }
 });
 
