@@ -1,10 +1,10 @@
 import Member from "../../models/member.model";
 import Account from "../../models/account.model";
 import auth from "../../helpers/auth";
+import sendEmail from "../../helpers/email-sender";
+import generator from "../../helpers/generator";
 import bcrypt from "bcryptjs";
 import env from "custom-env";
-import crypto from "crypto";
-import nodemailer from "nodemailer";
 
 env.env();
 class authController {
@@ -27,23 +27,13 @@ class authController {
       const {
         resetPasswordToken,
         resetPasswordExpires
-      } = generatePasswordReset();
+      } = await generator.generatePasswordReset();
 
       account.resetPasswordToken = resetPasswordToken;
       account.resetPasswordExpires = resetPasswordExpires;
       account.save();
 
-      const host = req.headers.host;
-      const token = account.resetPasswordToken;
-      const link = `http://${host}/reset/password/${token}`;
-      const text = `Hi ${account.username} \n  Please click on the following link ${link} 
-      to reset your password. \n\n 
-      If you did not request this, please ignore this email and your password will 
-      remain unchanged.\n`;
-      const subject = "Password change request";
-      const mail = generateEmail(account.username, subject, text);
-
-      transport.sendMail(mail);
+      await sendEmail.forgotPassword(req, account);
 
       return res.render("auth/message-window", {
         title: "Email Sent",
@@ -99,12 +89,8 @@ class authController {
       account.resetPasswordToken = undefined;
       account.resetPasswordExpires = undefined;
       account.save();
-      const subject = "Your password has been changed";
-      const text = `Hi ${account.username} \n 
-                    This is a confirmation that the password for your account has just been changed.\n`;
-      const mail = generateEmail(account.username, subject, text);
 
-      transport.sendMail(mail);
+      await sendEmail.resetPassword(account);
 
       return res.render("auth/message-window", {
         title: "Password Changed",
@@ -113,7 +99,7 @@ class authController {
       });
     } catch (error) {
       console.log("ERR:", error);
-      next(error);
+      throw new ErrorHandler(500, error);
     }
   }
 
@@ -130,52 +116,53 @@ class authController {
     );
   }
 
-  static signup(req, res) {
+  static async signup(req, res) {
     const { member, username, password, confirmPassword } = req.body;
-    Account.findOne({ username: username })
-      .then(userDoc => {
-        if (userDoc) {
-          req.flash("error", "Username is used by another user");
-          return res.redirect("signup");
-        }
-        return bcrypt.hash(password, 12).then(hashedPassword => {
-          const account = new Account({
-            username: username,
-            member: member,
-            password: hashedPassword
-          });
-          return account.save();
-        });
-      })
-      .then(result => {
-        return res.redirect("/login");
-      })
-      .catch(err => console.log("ERR: Could not signup user, " + user));
+    const foundAccount = await Account.findOne({ username: username });
+    try {
+      if (foundAccount) {
+        req.flash("error", "Username is used by another user");
+        return res.redirect("signup");
+      }
+
+      if (password !== confirmPassword) {
+        req.flash("error", "Passwords Do not match");
+        return res.redirect("signup");
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 12);
+      const account = new Account({
+        username: username,
+        member: member,
+        password: hashedPassword
+      });
+      await account.save();
+      return res.redirect("/login");
+    } catch (error) {
+      console.log("ERR:", error);
+      throw new ErrorHandler(500, error);
+    }
   }
 
-  static login(req, res) {
+  static async login(req, res) {
     const { username, password } = req.body;
-    const account = auth.findAccount(username);
-    account
-      .then(acc => {
-        if (auth.passwordIsValid(password, acc.password)) {
-          req.session.isLoggedIn = true;
-          req.session.account =
-            acc.member.firstname + " " + acc.member.lastname;
-          return res.redirect("/admin");
-        } else {
-          return res.render("auth/login", {
-            errorMessage: "Invalid Username or Password",
-            oldInput: { email: username }
-          });
-        }
-      })
-      .catch(error => {
+    const account = await auth.findAccount(username);
+    try {
+      if (!auth.passwordIsValid(password, account.password)) {
         return res.render("auth/login", {
-          errorMessage: "User Not Found",
+          errorMessage: "Invalid Username or Password",
           oldInput: { email: username }
         });
+      }
+      req.session.isLoggedIn = true;
+      req.session.account = `${account.member.firstname} ${account.member.lastname}`;
+      return res.redirect("/admin");
+    } catch (error) {
+      res.render("auth/login", {
+        errorMessage: "User Not Found",
+        oldInput: { email: username }
       });
+    }
   }
 
   static logout(req, res) {
@@ -184,29 +171,5 @@ class authController {
     });
   }
 }
-
-const transport = nodemailer.createTransport({
-  service: process.env.EMAIL_HOST,
-  auth: {
-    user: process.env.EMAIL_USERNAME,
-    pass: process.env.EMAIL_PWD
-  }
-});
-
-const generateEmail = (to, subject, text) => {
-  const mail = {
-    to: to,
-    from: process.env.FROM_EMAIL,
-    subject: subject,
-    text: text
-  };
-  return mail;
-};
-
-const generatePasswordReset = () => {
-  const resetPasswordToken = crypto.randomBytes(20).toString("hex");
-  const resetPasswordExpires = Date.now() + 3600000; //expires in an hour
-  return { resetPasswordToken, resetPasswordExpires };
-};
 
 export default authController;
