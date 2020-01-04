@@ -52,7 +52,7 @@ class authController {
       });
     } catch (error) {
       console.log("ERR:", error);
-      return sendError(res, error);
+      throw new ErrorHandler(500, error);
     }
   }
 
@@ -113,7 +113,7 @@ class authController {
       });
     } catch (error) {
       console.log("ERR:", error);
-      return sendError(res, error);
+      next(error);
     }
   }
 
@@ -207,13 +207,6 @@ const generatePasswordReset = () => {
   const resetPasswordToken = crypto.randomBytes(20).toString("hex");
   const resetPasswordExpires = Date.now() + 3600000; //expires in an hour
   return { resetPasswordToken, resetPasswordExpires };
-};
-const sendError = (res, error) => {
-  return res.render("auth/message-window", {
-    title: "404",
-    heading: "Oh No, 404. Something Has Happened",
-    message: error.message
-  });
 };
 
 export default authController;
