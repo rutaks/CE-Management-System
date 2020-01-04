@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-lg-1"></div>
                         <div class="col-lg-11">
-                            <form action="/admin/pledges/partnerships/dated" method="post">
+                            <form action="/admin/finances/partnerships/dated" method="post">
                                 <div class="col-lg-4 form-group">
                                     <label>Date range:</label>
                                     <div class="input-group">
@@ -67,7 +67,7 @@
                         <thead>
                             <tr>
                                 <th>Names</th>
-                                <th>Fellowship</th>
+                                <th>Phone No</th>
                                 <th>Partnership Arm</th>
                                 <th>Amount</th>
                                 <th>Given On</th>
@@ -78,12 +78,12 @@
                             <% for(let pledge of pledges){  %>
                             <tr>
                                 <td><%= pledge.member.firstname %> <%= pledge.member.lastname %></td>
-                                <td><%= pledge.member.fellowship.name || "None"%></td>
+                                <td><%= pledge.member.phonenumber || "None"%></td>
                                 <td><%= pledge.partnership.name%></td>
                                 <td><%= pledge.amount%>
                                     <%= typeof pledge.currency !== "undefined" ? pledge.currency : ""  %></td>
                                 <td><%= pledge.createOn.toDateString()%></td>
-                                <td> <a href="/admin/pledges/partnerships/member/<%= pledge.member._id %>"
+                                <td> <a href="/admin/finances/partnerships/member/<%= pledge.member._id %>"
                                         class="btn btn-block">
                                         <li class="fa fa-list"></li>
                                     </a> </td>
@@ -93,7 +93,7 @@
                         <tfoot>
                             <tr>
                                 <th>Names</th>
-                                <th>Fellowship</th>
+                                <th>Phone No</th>
                                 <th>Partnership Arm</th>
                                 <th>Amount</th>
                                 <th>Given On</th>
