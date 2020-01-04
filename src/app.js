@@ -2,7 +2,6 @@ import express from "express";
 import env from "custom-env";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import mongodb from "mongodb";
 import path from "path";
 import session from "express-session";
 import MongoDBSession from "connect-mongodb-session";
@@ -11,7 +10,7 @@ import flashMessages from "connect-flash";
 import apiRoutes from "./routes/api.routes";
 import staticRoutes from "./routes/static.routes";
 
-import Account from "./models/account.model";
+import ErrorHandler from "./helpers/error-handler";
 
 env.env();
 
@@ -24,7 +23,7 @@ const store = new MongoDBStore({
 });
 
 store.on("error", function(error) {
-  console.log(error);
+  console.error("ERR:", error);
 });
 
 app.set("view engine", "ejs");
@@ -43,6 +42,15 @@ app.use(
   })
 );
 
+const handleError = (err, res) => {
+  const { statusCode, message } = err;
+  return res.render("auth/message-window", {
+    title: statusCode,
+    heading: `Oh No, ${statusCode}. Something Has Happened`,
+    message: message
+  });
+};
+
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.account = req.session.account;
@@ -51,6 +59,10 @@ app.use((req, res, next) => {
 
 app.use("/", staticRoutes);
 app.use("/api", apiRoutes);
+
+app.use((err, req, res, next) => {
+  handleError(err, res);
+});
 
 mongoose
   .connect(process.env.MONGODB_URI, {
