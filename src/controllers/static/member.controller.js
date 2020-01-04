@@ -8,10 +8,9 @@ import {
 } from "../../helpers/validations";
 
 class memberController {
-  //Displats Add Page
   static async getAddMemberPage(req, res) {
-    let departments = await Department.find().exec();
-    let fellowships = await Fellowship.find().exec();
+    let departments = await Department.find();
+    let fellowships = await Fellowship.find();
     let members = await Member.find()
       .populate("fellowship")
       .exec();
@@ -44,9 +43,7 @@ class memberController {
     if (error) {
       let departments = await Department.find().exec();
       let fellowships = await Fellowship.find().exec();
-      let members = await Member.find()
-        .populate("fellowship")
-        .exec();
+      let members = await Member.find().populate("fellowship");
 
       return res.render("admin/member-add", {
         departments: departments,
@@ -57,6 +54,7 @@ class memberController {
         title: "Member Page"
       });
     }
+
     const member = new Member({
       firstname: firstname,
       lastname: lastname,
@@ -66,8 +64,16 @@ class memberController {
       gender: gender
     });
 
-    (firstTimeDate) ? member.firstTimeDate = firstTimeDate : member.firstTimeDate = new Date();
-    if(foundationGraduationDate != "") member.foundationGraduationDate = foundationGraduationDate;
+    if (firstTimeDate) {
+      member.firstTimeDate = firstTimeDate;
+    } else {
+      member.firstTimeDate = new Date();
+    }
+
+    if (foundationGraduationDate != "") {
+      member.foundationGraduationDate = foundationGraduationDate;
+    }
+
     if (fellowshipExists(fellowship)) member.fellowship = fellowship;
     if (departmentExists(department)) member.department = department;
 
