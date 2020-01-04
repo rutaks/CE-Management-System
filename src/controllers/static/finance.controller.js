@@ -11,7 +11,7 @@ import searcher from "../../helpers/searchers";
 import { validatePartnership } from "../../helpers/validations";
 import ErrorHandler from "../../helpers/error-handler";
 
-class PartnershipPledgeController {
+class FinanceController {
   static async getAddPartnershipPledgePage(req, res) {
     try {
       const givingCategories = await GivingCategory.find();
@@ -173,4 +173,4 @@ class PartnershipPledgeController {
   }
 }
 
-export default PartnershipPledgeController;
+export default FinanceController;
