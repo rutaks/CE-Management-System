@@ -122,12 +122,12 @@ class authController {
     try {
       if (foundAccount) {
         req.flash("error", "Username is used by another user");
-        return res.redirect("signup");
+        return res.redirect("/signup");
       }
 
       if (password !== confirmPassword) {
         req.flash("error", "Passwords Do not match");
-        return res.redirect("signup");
+        return res.redirect("/signup");
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
