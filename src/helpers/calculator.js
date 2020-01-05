@@ -25,6 +25,14 @@ class calculator {
     }
     return { usdTot, rwfTot };
   }
+
+  static findTotalAttendance(array) {
+    let total = 0;
+    array.forEach(element => {
+      total += 1;
+    });
+    return total;
+  }
 }
 
 export default calculator;
