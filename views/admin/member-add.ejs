@@ -177,6 +177,9 @@
                             <%} else {%>
                             <td><%="None"%></td>
                             <%}%>
+                            <td> <a href="/admin/attendance/add/<%= member._id %>" class="btn btn-block">
+                                    <li class="fa fa-plus"></li>
+                                </a> </td>
                         </tr>
                         <% } %>
                     </tbody>
@@ -187,6 +190,7 @@
                             <th>Phone Number</th>
                             <th>Fellowship</th>
                             <th>Gender</th>
+                            <th>Action</th>
                         </tr>
                     </tfoot>
                 </table>
